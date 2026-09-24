@@ -1,0 +1,11 @@
+Using local parent GAMS system directory
+Default system font: Courier New size 10
+settings initialized
+Info [14:44:32]: Started: C:\GAMS\54\studio\studio.exe
+Info [14:44:32]: GAMS System Directory: C:\GAMS\54
+GAMS Studio 1.25.6 on Windows 11 Version 25H2 x86_64 build 10.0.26200
+GAMS licensing running: C:\GAMS\54\gams /?? lo=3 procTreeMemMonitor=0 curdir="C:\Users\A02514490\Documents\GAMS"
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.lst
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.gms
+Deleted 1/1 editors of C:/Users/A02514490/Documents/GAMS/Ex2-1-labor.gms
+Deleted 1/1 editors of C:/Users/A02514490/Documents/GAMS/Ex2-1-labor.lst

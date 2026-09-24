@@ -1,0 +1,22 @@
+Using local parent GAMS system directory
+Default system font: Courier New size 10
+settings initialized
+Info [10:19:52]: Started: C:\GAMS\54\studio\studio.exe
+Info [10:19:52]: GAMS System Directory: C:\GAMS\54
+GAMS Studio 1.25.6 on Windows 11 Version 25H2 x86_64 build 10.0.26200
+GAMS licensing running: C:\GAMS\54\gams /?? lo=3 procTreeMemMonitor=0 curdir="C:\Users\A02514490\Documents\GAMS"
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.lst
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.gms
+Deleted 1/1 editors of C:/Users/A02514490/Documents/GAMS/Ex2-1-labor.lst
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.~log
+Info [10:21:09]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.lst
+Deleted 1/1 editors of C:/Users/A02514490/Documents/GAMS/Ex2-1-labor.lst
+Info [10:32:50]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Info [10:33:33]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Info [10:34:26]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Added editor 1 to C:\Users\A02514490\Documents\GAMS\Ex2-1-labor.lst
+Info [10:43:18]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Info [10:43:48]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Info [10:44:48]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
+Info [10:45:15]: Running: C:\GAMS\54\gams.exe "Ex2-1-labor.gms" logoption=3 ide=1 errorlog=99 errmsg=1 pagesize=0 lstTitleleftaligned=1
