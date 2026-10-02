@@ -1,0 +1,344 @@
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  SETS
+   2      p   products  /Truck, Sedan/
+   3      r   resources /FuelTanks, Seats, FourWD, TotalVeh/;
+   4   
+   5  PARAMETERS
+   6      profit(p)
+   7      / Truck  100
+   8        Sedan  110 /
+   9      avail(r)
+  10      / FuelTanks  14000
+  11        Seats      18000
+  12        FourWD      6000
+  13        TotalVeh   10000 /;
+  14   
+  15  TABLE use(r,p)
+  16                Truck   Sedan
+  17  FuelTanks       2       1
+  18  Seats           1       2
+  19  FourWD          1       0
+  20  TotalVeh        1       1;
+  21   
+  22  * PRIMAL MODEL
+  23   
+  24  POSITIVE VARIABLES X(p);
+  25  VARIABLES Z;
+  26   
+  27  EQUATIONS
+  28      OBJ
+  29      ResourceLimit(r);
+  30   
+  31  OBJ..  Z =e= sum(p, profit(p)*X(p));
+  32   
+  33  ResourceLimit(r)..  sum(p, use(r,p)*X(p)) =l= avail(r);
+  34   
+  35  MODEL primal /OBJ, ResourceLimit/;
+  36   
+  37  SOLVE primal USING LP MAXIMIZING Z;
+  38   
+  39   
+  40  * DUAL MODEL
+  41   
+  42  POSITIVE VARIABLES Y(r);
+  43  VARIABLES W;
+  44   
+  45  EQUATIONS
+  46      DualOBJ
+  47      ProductReq(p);
+  48   
+  49  DualOBJ..  W =e= sum(r, avail(r)*Y(r));
+  50   
+  51  ProductReq(p)..  sum(r, use(r,p)*Y(r)) =g= profit(p);
+  52   
+  53  MODEL dual /DualOBJ, ProductReq/;
+  54   
+  55  SOLVE dual USING LP MINIMIZING W;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE primal Using LP From line 37
+
+
+---- OBJ  =E=  
+
+OBJ..  - 100*X(Truck) - 110*X(Sedan) + Z =E= 0 ; (LHS = 0)
+     
+
+---- ResourceLimit  =L=  
+
+ResourceLimit(FuelTanks)..  2*X(Truck) + X(Sedan) =L= 14000 ; (LHS = 0)
+     
+ResourceLimit(Seats)..  X(Truck) + 2*X(Sedan) =L= 18000 ; (LHS = 0)
+     
+ResourceLimit(FourWD)..  X(Truck) =L= 6000 ; (LHS = 0)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE primal Using LP From line 37
+
+
+---- X  
+
+X(Truck)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -100       OBJ
+        2       ResourceLimit(FuelTanks)
+        1       ResourceLimit(Seats)
+        1       ResourceLimit(FourWD)
+        1       ResourceLimit(TotalVeh)
+
+X(Sedan)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -110       OBJ
+        1       ResourceLimit(FuelTanks)
+        2       ResourceLimit(Seats)
+        1       ResourceLimit(TotalVeh)
+
+
+---- Z  
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       OBJ
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE primal Using LP From line 37
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 6.000E+03, 1.800E+04] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.100E+02]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE primal Using LP From line 37
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            5
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            3
+NON ZERO ELEMENTS            10
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE primal Using LP From line 37
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   primal              OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  37
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE          1080000.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         3    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:      1080000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU OBJ                 .              .              .             1.0000      
+
+---- EQU ResourceLimit  
+
+                 LOWER          LEVEL          UPPER         MARGINAL
+
+FuelTanks        -INF        12000.0000     14000.0000          .          
+Seats            -INF        18000.0000     18000.0000        10.0000      
+FourWD           -INF         2000.0000      6000.0000          .          
+TotalVeh         -INF        10000.0000     10000.0000        90.0000      
+
+---- VAR X  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+Truck          .          2000.0000        +INF             .          
+Sedan          .          8000.0000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF      1080000.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE dual Using LP From line 55
+
+
+---- DualOBJ  =E=  
+
+DualOBJ..  - 14000*Y(FuelTanks) - 18000*Y(Seats) - 6000*Y(FourWD) - 10000*Y(TotalVeh) + W =E= 0 ; (LHS = 0)
+     
+
+---- ProductReq  =G=  
+
+ProductReq(Truck)..  2*Y(FuelTanks) + Y(Seats) + Y(FourWD) + Y(TotalVeh) =G= 100 ; (LHS = 0, INFES = 100 ****)
+     
+ProductReq(Sedan)..  Y(FuelTanks) + 2*Y(Seats) + Y(TotalVeh) =G= 110 ; (LHS = 0, INFES = 110 ****)
+     
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE dual Using LP From line 55
+
+
+---- Y  
+
+Y(FuelTanks)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+   -14000       DualOBJ
+        2       ProductReq(Truck)
+        1       ProductReq(Sedan)
+
+Y(Seats)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+   -18000       DualOBJ
+        1       ProductReq(Truck)
+        2       ProductReq(Sedan)
+
+Y(FourWD)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+    -6000       DualOBJ
+        1       ProductReq(Truck)
+
+REMAINING ENTRY SKIPPED
+
+---- W  
+
+W
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       DualOBJ
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE dual Using LP From line 55
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+02, 1.100E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.800E+04]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE dual Using LP From line 55
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            3
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            5
+NON ZERO ELEMENTS            12
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/02/26 14:46:10 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE dual Using LP From line 55
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   dual                OBJECTIVE  W
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  55
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE          1080000.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         2    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Optimal solution found
+Objective:      1080000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU DualOBJ             .              .              .             1.0000      
+
+---- EQU ProductReq  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+Truck       100.0000       100.0000        +INF         2000.0000      
+Sedan       110.0000       110.0000        +INF         8000.0000      
+
+---- VAR Y  
+
+                 LOWER          LEVEL          UPPER         MARGINAL
+
+FuelTanks          .              .            +INF         2000.0000      
+Seats              .            10.0000        +INF             .          
+FourWD             .              .            +INF         4000.0000      
+TotalVeh           .            90.0000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR W                 -INF      1080000.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.328 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+
+
+USER: Course License                                 G260818+0003Ac-GEN
+      Utah State University                                     DCE5615
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\A02514490\Documents\GAMS\VehicleProduction_SetStyle.gms
+Output     C:\Users\A02514490\Documents\GAMS\VehicleProduction_SetStyle.lst

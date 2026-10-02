@@ -1,0 +1,215 @@
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  SETS i suppliers /KansasCity, Dallas/
+   2       j dealerships /Minneapolis, NewYork, SanFrancisco, Seattle/;
+   3   
+   4  PARAMETERS
+   5      supply(i)
+   6      / KansasCity 1000
+   7        Dallas      800 /
+   8      demand(j)
+   9      / Minneapolis  400
+  10        NewYork      250
+  11        SanFrancisco 450
+  12        Seattle      450 /;
+  13   
+  14  TABLE cost(i,j)
+  15                  Minneapolis  NewYork  SanFrancisco  Seattle
+  16  KansasCity            4       12            18       18
+  17  Dallas                9       15            17       21;
+  18   
+  19  POSITIVE VARIABLES x(i,j);
+  20  VARIABLES z;
+  21   
+  22  EQUATIONS
+  23      PROFIT
+  24      SupplyLimit(i)
+  25      DemandRequirement(j);
+  26   
+  27  PROFIT..  z =e= 100*sum((i,j), cost(i,j)*x(i,j));
+  28   
+  29  supplyLimit(i)..  sum(j, x(i,j)) =l= supply(i);
+  30   
+  31  demandRequirement(j)..  sum(i, x(i,j)) =g= demand(j);
+  32   
+  33  MODEL shipping /PROFIT, SupplyLimit, DemandRequirement/;
+  34   
+  35  SOLVE shipping USING LP MINIMIZING z;
+
+
+COMPILATION TIME     =        0.015 SECONDS      3 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE shipping Using LP From line 35
+
+
+---- PROFIT  =E=  
+
+PROFIT..  - 400*x(KansasCity,Minneapolis) - 1200*x(KansasCity,NewYork) - 1800*x(KansasCity,SanFrancisco) - 1800*x(KansasCity,Seattle) - 900*x(Dallas,Minneapolis) - 1500*x(Dallas,NewYork) - 1700*x(Dallas,SanFrancisco) - 2100*x(Dallas,Seattle) + z =E= 0 ; (LHS = 0)
+     
+
+---- SupplyLimit  =L=  
+
+SupplyLimit(KansasCity)..  x(KansasCity,Minneapolis) + x(KansasCity,NewYork) + x(KansasCity,SanFrancisco) + x(KansasCity,Seattle) =L= 1000 ; (LHS = 0)
+     
+SupplyLimit(Dallas)..  x(Dallas,Minneapolis) + x(Dallas,NewYork) + x(Dallas,SanFrancisco) + x(Dallas,Seattle) =L= 800 ; (LHS = 0)
+     
+
+---- DemandRequirement  =G=  
+
+DemandRequirement(Minneapolis)..  x(KansasCity,Minneapolis) + x(Dallas,Minneapolis) =G= 400 ; (LHS = 0, INFES = 400 ****)
+     
+DemandRequirement(NewYork)..  x(KansasCity,NewYork) + x(Dallas,NewYork) =G= 250 ; (LHS = 0, INFES = 250 ****)
+     
+DemandRequirement(SanFrancisco)..  x(KansasCity,SanFrancisco) + x(Dallas,SanFrancisco) =G= 450 ; (LHS = 0, INFES = 450 ****)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE shipping Using LP From line 35
+
+
+---- x  
+
+x(KansasCity,Minneapolis)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -400       PROFIT
+        1       SupplyLimit(KansasCity)
+        1       DemandRequirement(Minneapolis)
+
+x(KansasCity,NewYork)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+    -1200       PROFIT
+        1       SupplyLimit(KansasCity)
+        1       DemandRequirement(NewYork)
+
+x(KansasCity,SanFrancisco)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+    -1800       PROFIT
+        1       SupplyLimit(KansasCity)
+        1       DemandRequirement(SanFrancisco)
+
+REMAINING 5 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       PROFIT
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE shipping Using LP From line 35
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 2.500E+02, 1.000E+03] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 2.100E+03]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE shipping Using LP From line 35
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            7
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            9
+NON ZERO ELEMENTS            25
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 09/26/26 15:27:44 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE shipping Using LP From line 35
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   shipping            OBJECTIVE  z
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  35
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE          2065000.0000
+
+ RESOURCE USAGE, LIMIT          0.015 10000000000.000
+ ITERATION COUNT, LIMIT         5    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.02sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:      2065000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU PROFIT              .              .              .             1.0000      
+
+---- EQU SupplyLimit  
+
+                  LOWER          LEVEL          UPPER         MARGINAL
+
+KansasCity        -INF         1000.0000      1000.0000      -300.0000      
+Dallas            -INF          550.0000       800.0000          .          
+
+---- EQU DemandRequirement  
+
+                    LOWER          LEVEL          UPPER         MARGINAL
+
+Minneapolis        400.0000       400.0000        +INF          700.0000      
+NewYork            250.0000       250.0000        +INF         1500.0000      
+SanFrancisco       450.0000       450.0000        +INF         1700.0000      
+Seattle            450.0000       450.0000        +INF         2100.0000      
+
+---- VAR x  
+
+                               LOWER          LEVEL          UPPER         MARGINAL
+
+KansasCity.Minneapolis           .           400.0000        +INF             .          
+KansasCity.NewYork               .           150.0000        +INF             .          
+KansasCity.SanFrancisco          .              .            +INF          400.0000      
+KansasCity.Seattle               .           450.0000        +INF             .          
+Dallas    .Minneapolis           .              .            +INF          200.0000      
+Dallas    .NewYork               .           100.0000        +INF             .          
+Dallas    .SanFrancisco          .           450.0000        +INF             .          
+Dallas    .Seattle               .              .            +INF            EPS         
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF      2065000.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.188 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+
+
+USER: Course License                                 G260818+0003Ac-GEN
+      Utah State University                                     DCE5615
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\A02514490\Documents\GAMS\shipping.gms
+Output     C:\Users\A02514490\Documents\GAMS\shipping.lst

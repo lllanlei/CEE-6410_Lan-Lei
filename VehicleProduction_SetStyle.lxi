@@ -1,0 +1,27 @@
+B 3 C o m p i l a t i o n
+B 66 Equation Listing    SOLVE primal Using LP From line 37
+D 69 OBJ
+D 74 ResourceLimit
+B 86 Column Listing      SOLVE primal Using LP From line 37
+E 89 X
+E 107 Z
+B 115 Range Statistics    SOLVE primal Using LP From line 37
+B 126 Model Statistics    SOLVE primal Using LP From line 37
+B 139 Solution Report     SOLVE primal Using LP From line 37
+F 172 OBJ
+F 174 ResourceLimit
+G 183 X
+G 192 Z
+B 200 Equation Listing    SOLVE dual Using LP From line 55
+D 203 DualOBJ
+D 208 ProductReq
+B 216 Column Listing      SOLVE dual Using LP From line 55
+E 219 Y
+E 240 W
+B 248 Range Statistics    SOLVE dual Using LP From line 55
+B 259 Model Statistics    SOLVE dual Using LP From line 55
+B 272 Solution Report     SOLVE dual Using LP From line 55
+F 305 DualOBJ
+F 307 ProductReq
+G 314 Y
+G 325 W

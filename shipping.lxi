@@ -1,0 +1,16 @@
+B 3 C o m p i l a t i o n
+B 46 Equation Listing    SOLVE shipping Using LP From line 35
+D 49 PROFIT
+D 54 SupplyLimit
+D 61 DemandRequirement
+B 73 Column Listing      SOLVE shipping Using LP From line 35
+E 76 x
+E 98 z
+B 106 Range Statistics    SOLVE shipping Using LP From line 35
+B 117 Model Statistics    SOLVE shipping Using LP From line 35
+B 130 Solution Report     SOLVE shipping Using LP From line 35
+F 163 PROFIT
+F 165 SupplyLimit
+F 172 DemandRequirement
+G 181 x
+G 196 z
