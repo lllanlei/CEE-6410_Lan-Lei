@@ -1,0 +1,264 @@
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  SETS
+   2      Man    /Arnold, Supershelf/
+   3      Sup    /Thomas, Washburn/
+   4      Recip  /Zrox, Hewes, Rockwright/;
+   5   
+   6  PARAMETERS
+   7      cap(Man)
+   8      / Arnold      75
+   9        Supershelf  75 /
+  10      dem(Recip)
+  11      / Zrox        50
+  12        Hewes       60
+  13        Rockwright  40 /;
+  14   
+  15  TABLE costMS(Man,Sup)
+  16                Thomas   Washburn
+  17  Arnold          5         8
+  18  Supershelf      7         4;
+  19   
+  20  TABLE costSR(Sup,Recip)
+  21                Zrox   Hewes   Rockwright
+  22  Thomas          1      5         8
+  23  Washburn        3      4         4;
+  24   
+  25  POSITIVE VARIABLES X(Man,Sup), Y(Sup,Recip);
+  26  VARIABLES Z;
+  27   
+  28  EQUATIONS
+  29      OBJ
+  30      ManCap(Man)
+  31      SupBal(Sup)
+  32      RecipDem(Recip);
+  33   
+  34  OBJ..  Z =e= sum((Man,Sup), costMS(Man,Sup)*X(Man,Sup)) + sum((Sup,Recip), costSR(Sup,Recip)*Y(Sup,Recip));
+  35   
+  36  ManCap(Man)..  sum(Sup, X(Man,Sup)) =l= cap(Man);
+  37   
+  38  SupBal(Sup)..  sum(Recip, Y(Sup,Recip)) =l= sum(Man, X(Man,Sup));
+  39   
+  40  RecipDem(Recip)..  sum(Sup, Y(Sup,Recip)) =g= dem(Recip);
+  41   
+  42  MODEL NetworkShipping /ALL/;
+  43   
+  44  SOLVE NetworkShipping USING LP MINIMIZING Z;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE NetworkShipping Using LP From line 44
+
+
+---- OBJ  =E=  
+
+OBJ..  - 5*X(Arnold,Thomas) - 8*X(Arnold,Washburn) - 7*X(Supershelf,Thomas) - 4*X(Supershelf,Washburn) - Y(Thomas,Zrox) - 5*Y(Thomas,Hewes) - 8*Y(Thomas,Rockwright) - 3*Y(Washburn,Zrox) - 4*Y(Washburn,Hewes) - 4*Y(Washburn,Rockwright) + Z =E= 0 ; (LHS = 0)
+     
+
+---- ManCap  =L=  
+
+ManCap(Arnold)..  X(Arnold,Thomas) + X(Arnold,Washburn) =L= 75 ; (LHS = 0)
+     
+ManCap(Supershelf)..  X(Supershelf,Thomas) + X(Supershelf,Washburn) =L= 75 ; (LHS = 0)
+     
+
+---- SupBal  =L=  
+
+SupBal(Thomas)..  - X(Arnold,Thomas) - X(Supershelf,Thomas) + Y(Thomas,Zrox) + Y(Thomas,Hewes) + Y(Thomas,Rockwright) =L= 0 ; (LHS = 0)
+     
+SupBal(Washburn)..  - X(Arnold,Washburn) - X(Supershelf,Washburn) + Y(Washburn,Zrox) + Y(Washburn,Hewes) + Y(Washburn,Rockwright) =L= 0 ; (LHS = 0)
+     
+
+---- RecipDem  =G=  
+
+RecipDem(Zrox)..  Y(Thomas,Zrox) + Y(Washburn,Zrox) =G= 50 ; (LHS = 0, INFES = 50 ****)
+     
+RecipDem(Hewes)..  Y(Thomas,Hewes) + Y(Washburn,Hewes) =G= 60 ; (LHS = 0, INFES = 60 ****)
+     
+RecipDem(Rockwright)..  Y(Thomas,Rockwright) + Y(Washburn,Rockwright) =G= 40 ; (LHS = 0, INFES = 40 ****)
+     
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE NetworkShipping Using LP From line 44
+
+
+---- X  
+
+X(Arnold,Thomas)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -5       OBJ
+        1       ManCap(Arnold)
+       -1       SupBal(Thomas)
+
+X(Arnold,Washburn)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -8       OBJ
+        1       ManCap(Arnold)
+       -1       SupBal(Washburn)
+
+X(Supershelf,Thomas)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -7       OBJ
+        1       ManCap(Supershelf)
+       -1       SupBal(Thomas)
+
+REMAINING ENTRY SKIPPED
+
+---- Y  
+
+Y(Thomas,Zrox)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       OBJ
+        1       SupBal(Thomas)
+        1       RecipDem(Zrox)
+
+Y(Thomas,Hewes)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -5       OBJ
+        1       SupBal(Thomas)
+        1       RecipDem(Hewes)
+
+Y(Thomas,Rockwright)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -8       OBJ
+        1       SupBal(Thomas)
+        1       RecipDem(Rockwright)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- Z  
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       OBJ
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE NetworkShipping Using LP From line 44
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 4.000E+01, 7.500E+01] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 8.000E+00]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE NetworkShipping Using LP From line 44
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES           11
+NON ZERO ELEMENTS            31
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/05/26 16:54:37 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE NetworkShipping Using LP From line 44
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   NetworkShipping     OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  44
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             1150.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         7    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Optimal solution found
+Objective:         1150.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU OBJ                 .              .              .             1.0000      
+
+---- EQU ManCap  
+
+                  LOWER          LEVEL          UPPER         MARGINAL
+
+Arnold            -INF           75.0000        75.0000          .          
+Supershelf        -INF           75.0000        75.0000        -2.0000      
+
+---- EQU SupBal  
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+Thomas          -INF             .              .            -5.0000      
+Washburn        -INF             .              .            -6.0000      
+
+---- EQU RecipDem  
+
+                  LOWER          LEVEL          UPPER         MARGINAL
+
+Zrox              50.0000        50.0000        +INF            6.0000      
+Hewes             60.0000        60.0000        +INF           10.0000      
+Rockwright        40.0000        40.0000        +INF           10.0000      
+
+---- VAR X  
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+Arnold    .Thomas            .            75.0000        +INF             .          
+Arnold    .Washburn          .              .            +INF            2.0000      
+Supershelf.Thomas            .              .            +INF            4.0000      
+Supershelf.Washburn          .            75.0000        +INF             .          
+
+---- VAR Y  
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+Thomas  .Zrox                .            50.0000        +INF             .          
+Thomas  .Hewes               .            25.0000        +INF             .          
+Thomas  .Rockwright          .              .            +INF            3.0000      
+Washburn.Zrox                .              .            +INF            3.0000      
+Washburn.Hewes               .            35.0000        +INF             .          
+Washburn.Rockwright          .            40.0000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF         1150.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.156 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+
+
+USER: Course License                                 G260818+0003Ac-GEN
+      Utah State University                                     DCE5615
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\A02514490\Downloads\NetworkShipping (2).gms
+Output     C:\Users\A02514490\Downloads\NetworkShipping (2).lst

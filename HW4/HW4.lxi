@@ -1,0 +1,20 @@
+B 3 C o m p i l a t i o n
+B 55 Equation Listing    SOLVE NetworkShipping Using LP From line 44
+D 58 OBJ
+D 63 ManCap
+D 70 SupBal
+D 77 RecipDem
+B 87 Column Listing      SOLVE NetworkShipping Using LP From line 44
+E 90 X
+E 112 Y
+E 134 Z
+B 142 Range Statistics    SOLVE NetworkShipping Using LP From line 44
+B 153 Model Statistics    SOLVE NetworkShipping Using LP From line 44
+B 166 Solution Report     SOLVE NetworkShipping Using LP From line 44
+F 199 OBJ
+F 201 ManCap
+F 208 SupBal
+F 215 RecipDem
+G 223 X
+G 232 Y
+G 245 Z
