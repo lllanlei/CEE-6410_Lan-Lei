@@ -1,0 +1,31 @@
+B 3 C o m p i l a t i o n
+B 118 Equation Listing    SOLVE SpecialEvent Using MIP From line 99
+D 121 OBJ
+D 126 Demand
+D 131 LotCap
+D 140 AvgTime
+D 145 Seating
+D 150 UseVendor
+B 158 Column Listing      SOLVE SpecialEvent Using MIP From line 99
+E 161 X
+E 185 G
+E 200 I
+E 213 TCOST
+B 221 Range Statistics    SOLVE SpecialEvent Using MIP From line 99
+B 232 Model Statistics    SOLVE SpecialEvent Using MIP From line 99
+B 245 Solution Report     SOLVE SpecialEvent Using MIP From line 99
+F 282 OBJ
+F 283 Demand
+F 285 LotCap
+F 295 AvgTime
+F 296 Seating
+F 298 UseVendor
+G 305 X
+G 313 G
+G 320 I
+G 329 TCOST
+B 337 E x e c u t i o n
+I 337 X
+I 343 G
+I 348 I
+I 354 TCOST

@@ -1,0 +1,369 @@
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+      Special-Event Park-and-Ride Planning Problem
+      CEE 6410/5410
+      David Rosenberg
+      October 10, 2026
+       
+      This problem was contributed by Dr. Ran Sun and expanded by Dr. David Rosenberg
+       
+      Learning objectives.
+      Students will be able to:
+      •   Define dimensions, decision variables and an objective function;
+      •   Formulate demand, capacity, and service-quality constraints;
+      •   Solve a small linear program;
+      •   Identify constraints;
+       
+      Problem Statement
+      State Department of Transportation guidance for special events emphasizes advance parklotanning for transportation demand, traffic, parking, transit operations, and seating.
+       
+      Passengers must also be assigned in full bus-loads of 50 passengers per bus.
+       
+      Additionally, the event parklotanners must rent and bring in grandstands for the attendees. They have 2 potential venders. Each vender has an up-front reservation cost, number of seats per grandstand, and cost to load, ship, and setup a grandstand.
+       
+      Vendor  Reservation cost ($)    Seats per grandstand    Cost to load, ship, and setup ($ per grandstand)
+      PurpleRain $1,000                   100                 200
+      Blue Sky    $1,500                  200                 300
+       
+      Full details at https://usu.instructure.com/courses/818402/files/100525844?wrap=1
+       
+      David E Rosenberg
+      david.rosenberg@usu.edu
+  32   
+  33  * 1. DEFINE the SETS
+  34  SETS parklot Parking Lots /north, south, west/
+  35      vendor Vendors of grandstands /PurpleRain, BlueSky/;
+  36   
+  37  * 2. DEFINE input data
+  38  PARAMETERS
+  39     MaxPassengers(parklot) maximimum number of peoparklote parking lot can handle (Number)
+  40           /north 600,
+  41            south 500,
+  42            west  600/
+  43     Cost(parklot) cost per passenger from parking lot ($ per person)
+  44            /north 4,
+  45            south 5,
+  46            west  7/
+  47     TravelTime(parklot) Travel time from parking lot (minutes)
+  48           /north 20,
+  49            south 12,
+  50            west  8/
+  51     MaxAverageTime Maximum average travel time for all pasengers (minutes) /13/
+  52     Attendees number of attendees /1200/
+  53     ReservationCost(vendor) Cost to reserve grandstands from vendor ($)
+  54          /PurpleRain 1000,
+  55           BlueSky    1500/
+  56     Seats(vendor) Seats per grandstand (number)
+  57          /PurpleRain 100,
+  58           BlueSky    200/
+  59      UnitCost(vendor) Cost per grandstand to load ship and setup ($ per grandstand)
+  60          /PurpleRain 200,
+  61           BlueSky    300/;
+  62   
+  63   
+  64   
+  65  * 3. DEFINE the variables
+  66  INTEGER VARIABLES X(parklot), G(vendor);
+  67  BINARY VARIABLES I(vendor);
+  68  VARIABLES TCOST;
+  69   
+  70   
+  71  * 4. COMBINE variables and data in equations
+  72  *EQUATIONS
+  73  EQUATIONS
+  74      OBJ
+  75      Demand
+  76      LotCap(parklot)
+  77      AvgTime
+  78      Seating
+  79      UseVendor(vendor);
+  80   
+  81  OBJ..  TCOST =e= sum(parklot, 50*Cost(parklot)*X(parklot)) + sum(vendor, ReservationCost(vendor)*I(vendor) + UnitCost(vendor)*G(vendor));
+  82   
+  83  Demand..  sum(parklot, 50*X(parklot)) =g= Attendees;
+  84   
+  85  LotCap(parklot)..  50*X(parklot) =l= MaxPassengers(parklot);
+  86   
+  87  AvgTime..  sum(parklot, TravelTime(parklot)*50*X(parklot)) =l= MaxAverageTime*sum(parklot, 50*X(parklot));
+  88   
+  89  Seating..  sum(vendor, Seats(vendor)*G(vendor)) =g= Attendees;
+  90   
+  91  UseVendor(vendor)..  G(vendor) =l= ceil(Attendees/Seats(vendor))*I(vendor);
+  92   
+  93   
+  94  * 5. DEFINE the MODEL from the EQUATIONS
+  95  MODEL SpecialEvent /ALL/;
+  96   
+  97   
+  98  * 6. Solve the Model as a Mixed Integer Program
+  99  SOLVE SpecialEvent USING MIP MINIMIZING TCOST;
+ 100   
+ 101   
+ 102  * 7. Disparklotay the decision variable values in the list file
+ 103  *DISLAY X.L, I.L, TCOST.L;
+ 104  DISPLAY X.L, G.L, I.L, TCOST.L;
+ 105   
+ 106  * Dump all input data and results to a GAMS gdx file
+ 107  Execute_Unload "MIP-SpecialEvent.gdx";
+ 108  * Dump the gdx file to an Excel workbook
+ 109  Execute "gdx2xls MIP-SpecialEvent.gdx"
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE SpecialEvent Using MIP From line 99
+
+
+---- OBJ  =E=  
+
+OBJ..  - 200*X(north) - 250*X(south) - 350*X(west) - 200*G(PurpleRain) - 300*G(BlueSky) - 1000*I(PurpleRain) - 1500*I(BlueSky) + TCOST =E= 0 ; (LHS = 0)
+     
+
+---- Demand  =G=  
+
+Demand..  50*X(north) + 50*X(south) + 50*X(west) =G= 1200 ; (LHS = 0, INFES = 1200 ****)
+     
+
+---- LotCap  =L=  
+
+LotCap(north)..  50*X(north) =L= 600 ; (LHS = 0)
+     
+LotCap(south)..  50*X(south) =L= 500 ; (LHS = 0)
+     
+LotCap(west)..  50*X(west) =L= 600 ; (LHS = 0)
+     
+
+---- AvgTime  =L=  
+
+AvgTime..  350*X(north) - 50*X(south) - 250*X(west) =L= 0 ; (LHS = 0)
+     
+
+---- Seating  =G=  
+
+Seating..  100*G(PurpleRain) + 200*G(BlueSky) =G= 1200 ; (LHS = 0, INFES = 1200 ****)
+     
+
+---- UseVendor  =L=  
+
+UseVendor(PurpleRain)..  G(PurpleRain) - 12*I(PurpleRain) =L= 0 ; (LHS = 0)
+     
+UseVendor(BlueSky)..  G(BlueSky) - 6*I(BlueSky) =L= 0 ; (LHS = 0)
+     
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE SpecialEvent Using MIP From line 99
+
+
+---- X  
+
+X(north)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -200       OBJ
+       50       Demand
+       50       LotCap(north)
+      350       AvgTime
+
+X(south)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -250       OBJ
+       50       Demand
+       50       LotCap(south)
+      -50       AvgTime
+
+X(west)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -350       OBJ
+       50       Demand
+       50       LotCap(west)
+     -250       AvgTime
+
+
+---- G  
+
+G(PurpleRain)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -200       OBJ
+      100       Seating
+        1       UseVendor(PurpleRain)
+
+G(BlueSky)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -300       OBJ
+      200       Seating
+        1       UseVendor(BlueSky)
+
+
+---- I  
+
+I(PurpleRain)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -1000       OBJ
+      -12       UseVendor(PurpleRain)
+
+I(BlueSky)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -1500       OBJ
+       -6       UseVendor(BlueSky)
+
+
+---- TCOST  
+
+TCOST
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       OBJ
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE SpecialEvent Using MIP From line 99
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.000E+02, 1.200E+03] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.500E+03]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE SpecialEvent Using MIP From line 99
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           6     SINGLE EQUATIONS            9
+BLOCKS OF VARIABLES           4     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            23     DISCRETE VARIABLES          7
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE SpecialEvent Using MIP From line 99
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   SpecialEvent        OBJECTIVE  TCOST
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  99
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             9750.0000
+
+ RESOURCE USAGE, LIMIT          0.016 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 0.04 ticks)
+
+
+Proven optimal solution
+MIP Solution:         9750.000000    (0 iterations, 0 nodes)
+
+Best possible:        9750.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER
+
+---- EQU OBJ                 .              .              .          
+---- EQU Demand          1200.0000      1200.0000        +INF         
+
+---- EQU LotCap  
+
+             LOWER          LEVEL          UPPER
+
+north        -INF          350.0000       600.0000      
+south        -INF          450.0000       500.0000      
+west         -INF          400.0000       600.0000      
+
+                           LOWER          LEVEL          UPPER
+
+---- EQU AvgTime           -INF             .              .          
+---- EQU Seating         1200.0000      1200.0000        +INF         
+
+---- EQU UseVendor  
+
+                  LOWER          LEVEL          UPPER
+
+PurpleRain        -INF             .              .          
+BlueSky           -INF             .              .          
+
+---- VAR X  
+
+             LOWER          LEVEL          UPPER
+
+north          .             7.0000        +INF         
+south          .             9.0000        +INF         
+west           .             8.0000        +INF         
+
+---- VAR G  
+
+                  LOWER          LEVEL          UPPER
+
+PurpleRain          .              .            +INF         
+BlueSky             .             6.0000        +INF         
+
+---- VAR I  
+
+                  LOWER          LEVEL          UPPER
+
+PurpleRain          .              .             1.0000      
+BlueSky             .             1.0000         1.0000      
+
+                           LOWER          LEVEL          UPPER
+
+---- VAR TCOST             -INF         9750.0000        +INF         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/13/26 13:21:24 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    104 VARIABLE X.L  
+
+north 7.000,    south 9.000,    west  8.000
+
+
+----    104 VARIABLE G.L  
+
+BlueSky 6.000
+
+
+----    104 VARIABLE I.L  
+
+BlueSky 1.000
+
+
+----    104 VARIABLE TCOST.L               =     9750.000  
+
+
+EXECUTION TIME       =        3.250 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+
+
+USER: Course License                                 G260818+0003Ac-GEN
+      Utah State University                                     DCE5615
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\A02514490\Documents\GAMS\H. Integer Programming\MIP-SpecialEventPlanning.gms
+Output     C:\Users\A02514490\Documents\GAMS\H. Integer Programming\MIP-SpecialEventPlanning.lst
