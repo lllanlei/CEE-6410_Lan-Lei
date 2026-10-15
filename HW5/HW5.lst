@@ -1,0 +1,395 @@
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  SETS
+   2      t      /s1, s2/
+   3      Dam    /High, Low/;
+   4   
+   5  PARAMETERS
+   6      Q(t)
+   7      / s1   600
+   8        s2   200 /
+   9      dem(t)
+  10      / s1   1.0
+  11        s2   3.0 /
+  12      K(Dam)
+  13      / High  700
+  14        Low   300 /
+  15      C(Dam)
+  16      / High  10000
+  17        Low    6000 /;
+  18   
+  19  BINARY VARIABLES Y(Dam), YP;
+  20  POSITIVE VARIABLES A, S(t), D(t), R(t), P(t);
+  21  VARIABLES Z;
+  22   
+  23  EQUATIONS
+  24      OBJ
+  25      OneDam
+  26      MassBal(t)
+  27      StorCap(t)
+  28      Diversion(t)
+  29      PumpCap(t)
+  30      PumpFlow(t)
+  31      MeetDem(t);
+  32   
+  33  OBJ..  Z =e= 300*A - sum(Dam, C(Dam)*Y(Dam)) - 8000*YP - 20*sum(t, P(t));
+  34   
+  35  OneDam..  sum(Dam, Y(Dam)) =l= 1;
+  36   
+  37  MassBal(t)..  S(t++1) =e= S(t) + Q(t) - D(t) - R(t);
+  38   
+  39  StorCap(t)..  S(t) =l= sum(Dam, K(Dam)*Y(Dam));
+  40   
+  41  Diversion(t)..  D(t) =l= 1300*sum(Dam, Y(Dam));
+  42   
+  43  PumpCap(t)..  P(t) =l= 401.5*YP;
+  44   
+  45  PumpFlow(t)..  P(t) =l= R(t) + 365;
+  46   
+  47  MeetDem(t)..  D(t) + P(t) =g= dem(t)*A;
+  48   
+  49  MODEL ReservoirDesign /ALL/;
+  50   
+  51  SOLVE ReservoirDesign USING MIP MAXIMIZING Z;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE ReservoirDesign Using MIP From line 51
+
+
+---- OBJ  =E=  
+
+OBJ..  10000*Y(High) + 6000*Y(Low) + 8000*YP - 300*A + 20*P(s1) + 20*P(s2) + Z =E= 0 ; (LHS = 0)
+     
+
+---- OneDam  =L=  
+
+OneDam..  Y(High) + Y(Low) =L= 1 ; (LHS = 0)
+     
+
+---- MassBal  =E=  
+
+MassBal(s1)..  - S(s1) + S(s2) + D(s1) + R(s1) =E= 600 ; (LHS = 0, INFES = 600 ****)
+     
+MassBal(s2)..  S(s1) - S(s2) + D(s2) + R(s2) =E= 200 ; (LHS = 0, INFES = 200 ****)
+     
+
+---- StorCap  =L=  
+
+StorCap(s1)..  - 700*Y(High) - 300*Y(Low) + S(s1) =L= 0 ; (LHS = 0)
+     
+StorCap(s2)..  - 700*Y(High) - 300*Y(Low) + S(s2) =L= 0 ; (LHS = 0)
+     
+
+---- Diversion  =L=  
+
+Diversion(s1)..  - 1300*Y(High) - 1300*Y(Low) + D(s1) =L= 0 ; (LHS = 0)
+     
+Diversion(s2)..  - 1300*Y(High) - 1300*Y(Low) + D(s2) =L= 0 ; (LHS = 0)
+     
+
+---- PumpCap  =L=  
+
+PumpCap(s1)..  - 401.5*YP + P(s1) =L= 0 ; (LHS = 0)
+     
+PumpCap(s2)..  - 401.5*YP + P(s2) =L= 0 ; (LHS = 0)
+     
+
+---- PumpFlow  =L=  
+
+PumpFlow(s1)..  - R(s1) + P(s1) =L= 365 ; (LHS = 0)
+     
+PumpFlow(s2)..  - R(s2) + P(s2) =L= 365 ; (LHS = 0)
+     
+
+---- MeetDem  =G=  
+
+MeetDem(s1)..  - A + D(s1) + P(s1) =G= 0 ; (LHS = 0)
+     
+MeetDem(s2)..  - 3*A + D(s2) + P(s2) =G= 0 ; (LHS = 0)
+     
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE ReservoirDesign Using MIP From line 51
+
+
+---- Y  
+
+Y(High)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       OBJ
+        1       OneDam
+     -700       StorCap(s1)
+     -700       StorCap(s2)
+    -1300       Diversion(s1)
+    -1300       Diversion(s2)
+
+Y(Low)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+     6000       OBJ
+        1       OneDam
+     -300       StorCap(s1)
+     -300       StorCap(s2)
+    -1300       Diversion(s1)
+    -1300       Diversion(s2)
+
+
+---- YP  
+
+YP
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+     8000       OBJ
+     -401.5     PumpCap(s1)
+     -401.5     PumpCap(s2)
+
+
+---- A  
+
+A
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -300       OBJ
+       -1       MeetDem(s1)
+       -3       MeetDem(s2)
+
+
+---- S  
+
+S(s1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       MassBal(s1)
+        1       MassBal(s2)
+        1       StorCap(s1)
+
+S(s2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       MassBal(s1)
+       -1       MassBal(s2)
+        1       StorCap(s2)
+
+
+---- D  
+
+D(s1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       MassBal(s1)
+        1       Diversion(s1)
+        1       MeetDem(s1)
+
+D(s2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       MassBal(s2)
+        1       Diversion(s2)
+        1       MeetDem(s2)
+
+
+---- R  
+
+R(s1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       MassBal(s1)
+       -1       PumpFlow(s1)
+
+R(s2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       MassBal(s2)
+       -1       PumpFlow(s2)
+
+
+---- P  
+
+P(s1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       20       OBJ
+        1       PumpCap(s1)
+        1       PumpFlow(s1)
+        1       MeetDem(s1)
+
+P(s2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       20       OBJ
+        1       PumpCap(s2)
+        1       PumpFlow(s2)
+        1       MeetDem(s2)
+
+
+---- Z  
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       OBJ
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE ReservoirDesign Using MIP From line 51
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 6.000E+02] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.000E+04]
+
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE ReservoirDesign Using MIP From line 51
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           8     SINGLE EQUATIONS           14
+BLOCKS OF VARIABLES           8     SINGLE VARIABLES           13
+NON ZERO ELEMENTS            43     DISCRETE VARIABLES          3
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+GAMS 54.4.0  9a60ae27 Sep 9, 2026           WEX-WEI x86 64bit/MS Windows - 10/15/26 16:59:25 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE ReservoirDesign Using MIP From line 51
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   ReservoirDesign     OBJECTIVE  Z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  51
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE            82150.0000
+
+ RESOURCE USAGE, LIMIT          0.031 10000000000.000
+ ITERATION COUNT, LIMIT        12    2147483647
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.03sec (det. 0.16 ticks)
+
+
+Proven optimal solution
+MIP Solution:        82150.000000    (12 iterations, 0 nodes)
+
+Best possible:       82150.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER
+
+---- EQU OBJ                 .              .              .          
+---- EQU OneDam            -INF            1.0000         1.0000      
+
+---- EQU MassBal  
+
+          LOWER          LEVEL          UPPER
+
+s1       600.0000       600.0000       600.0000      
+s2       200.0000       200.0000       200.0000      
+
+---- EQU StorCap  
+
+          LOWER          LEVEL          UPPER
+
+s1        -INF         -700.0000          .          
+s2        -INF         -117.5000          .          
+
+---- EQU Diversion  
+
+          LOWER          LEVEL          UPPER
+
+s1        -INF        -1282.5000          .          
+s2        -INF         -517.5000          .          
+
+---- EQU PumpCap  
+
+          LOWER          LEVEL          UPPER
+
+s1        -INF          -36.5000          .          
+s2        -INF          -36.5000          .          
+
+---- EQU PumpFlow  
+
+          LOWER          LEVEL          UPPER
+
+s1        -INF          365.0000       365.0000      
+s2        -INF          365.0000       365.0000      
+
+---- EQU MeetDem  
+
+          LOWER          LEVEL          UPPER
+
+s1          .              .            +INF         
+s2          .       1.136868E-13        +INF         
+
+---- VAR Y  
+
+            LOWER          LEVEL          UPPER
+
+High          .             1.0000         1.0000      
+Low           .              .             1.0000      
+
+                           LOWER          LEVEL          UPPER
+
+---- VAR YP                  .             1.0000         1.0000      
+---- VAR A                   .           382.5000        +INF         
+
+---- VAR S  
+
+          LOWER          LEVEL          UPPER
+
+s1          .              .            +INF         
+s2          .           582.5000        +INF         
+
+---- VAR D  
+
+          LOWER          LEVEL          UPPER
+
+s1          .            17.5000        +INF         
+s2          .           782.5000        +INF         
+
+---- VAR R  
+
+          LOWER          LEVEL          UPPER
+
+s1          .              .            +INF         
+s2          .              .            +INF         
+
+---- VAR P  
+
+          LOWER          LEVEL          UPPER
+
+s1          .           365.0000        +INF         
+s2          .           365.0000        +INF         
+
+                           LOWER          LEVEL          UPPER
+
+---- VAR Z                 -INF        82150.0000        +INF         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.109 SECONDS      4 MB  54.4.0 9a60ae27 WEX-WEI
+
+
+USER: Course License                                 G260818+0003Ac-GEN
+      Utah State University                                     DCE5615
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\A02514490\Documents\GAMS\HW5\HW5.gms
+Output     C:\Users\A02514490\Documents\GAMS\HW5\HW5.lst

@@ -1,0 +1,130 @@
+--- Job HW5.gms Start 10/15/26 16:59:25 54.4.0 9a60ae27 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\54\gmsprmNT.txt
+    C:\Users\A02514490\Documents\GAMS\gamsconfig.yaml
+--- GAMS Parameters defined
+    Input C:\Users\A02514490\Documents\GAMS\HW5\HW5.gms
+    PageSize 0
+    ScrDir C:\Users\A02514490\Documents\GAMS\HW5\225a\
+    SysDir C:\GAMS\54\
+    LogOption 3
+    AppendLog 1
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: Course License                                 G260818+0003Ac-GEN
+          Utah State University                                     DCE5615
+          225a\gamslice.dat
+          1d9a2824-f32d-4897
+          node:89599105 mem:32 cores:12 ipport:64930 v:2                   
+          Course license for use within the course and related course work
+          The time-limited license stops working on : Jun 14, 2027
+System information: 12 physical cores and 32 Gb physical memory detected
+GAMS 54.4.0   Copyright (C) 1987-2026 GAMS Development. All rights reserved
+--- Starting compilation
+--- HW5.gms(51) 3 Mb
+--- Starting execution: elapsed 0:00:00.018
+--- Generating MIP model ReservoirDesign
+--- HW5.gms(51) 4 Mb
+---   14 rows  13 columns  43 non-zeroes
+---   3 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 6.000E+02] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 1.000E+04]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:00.025
+
+IBM ILOG CPLEX   54.4.0 9a60ae27 Sep 9, 2026           WEI x86 64bit/MS Window
+
+*** This solver runs with a community license.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.2.0 | 2024-11-25 | 0edbb82fd
+CPXPARAM_Advance                                 0
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_Preprocessing_QCPDuals                  0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Found incumbent of value 0.000000 after 0.00 sec. (0.00 ticks)
+Tried aggregator 1 time.
+MIP Presolve eliminated 0 rows and 1 columns.
+MIP Presolve modified 2 coefficients.
+Reduced MIP has 13 rows, 12 columns, and 36 nonzeros.
+Reduced MIP has 3 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.02 ticks)
+Probing fixed 0 vars, tightened 7 bounds.
+Probing time = 0.00 sec. (0.01 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve modified 2 coefficients.
+Reduced MIP has 13 rows, 12 columns, and 36 nonzeros.
+Reduced MIP has 3 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.02 ticks)
+Probing time = 0.00 sec. (0.00 ticks)
+Clique table members: 1.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 24 threads.
+Parallel mode: deterministic, using up to 4 threads for parallel tasks at root LP.
+Tried aggregator 1 time.
+No LP presolve or aggregator reductions.
+Presolve time = 0.00 sec. (0.01 ticks)
+Initializing dual steep norms . . .
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1          122120.000000                      A      MeetDem(s2) slack
+     2          122120.000000                  D(s2)                  R(s2)
+     3          122120.000000                  D(s1)      MeetDem(s1) slack
+     4          104165.000000                  S(s2)                  R(s1)
+     5          102157.500000                  P(s1)     PumpFlow(s1) slack
+     6          100150.000000                  P(s2)     PumpFlow(s2) slack
+     7           91828.571429                Y(High)      StorCap(s2) slack
+     8           84555.844156                     YP      PumpCap(s2) slack
+     9           84443.939394                 Y(Low)    Diversion(s2) slack
+Root relaxation solution time = 0.00 sec. (0.02 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                            0.0000   130150.0000              --- 
+Found incumbent of value 0.000000 after 0.00 sec. (0.09 ticks)
+*     0+    0                        44000.0000   130150.0000           195.80%
+Found incumbent of value 44000.000000 after 0.00 sec. (0.09 ticks)
+      0     0    84443.9394     3    44000.0000    84443.9394        9   91.92%
+*     0+    0                        82150.0000    84443.9394             2.79%
+Found incumbent of value 82150.000000 after 0.00 sec. (0.10 ticks)
+      0     0        cutoff          82150.0000                     12     --- 
+Elapsed time = 0.02 sec. (0.16 ticks, tree = 0.01 MB)
+
+Root node processing (before b&c):
+  Real time             =    0.02 sec. (0.16 ticks)
+Parallel b&c, 24 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.02 sec. (0.16 ticks)
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.03sec (det. 0.16 ticks)
+
+
+Proven optimal solution
+MIP Solution:        82150.000000    (12 iterations, 0 nodes)
+
+Best possible:       82150.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Reading solution for model ReservoirDesign
+--- Solver did not provide marginals for model ReservoirDesign
+--- To request marginals from the solver set option requestMarginals >= 1
+*** Status: Normal completion
+--- Job HW5.gms Stop 10/15/26 16:59:25 elapsed 0:00:00.130
